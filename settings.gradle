@@ -4,4 +4,5 @@ include 'AuthMicroService:UserMicroService'
 findProject(':AuthMicroService:UserMicroService')?.name = 'UserMicroService'
 include 'UserMicroService'
 include 'UrunMicroService'
+include 'ETicaretMicroService'
 
