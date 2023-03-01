@@ -34,11 +34,12 @@ allprojects {
     }
     dependencies {
         implementation libs.springBootStarterWeb
+        implementation libs.swaggerui
         implementation libs.lombok
         annotationProcessor libs.lombok
         implementation libs.mapstruct
         annotationProcessor libs.mapstructProcessor
-
+        implementation libs.springBootStarterValidation
     }
 }
 
