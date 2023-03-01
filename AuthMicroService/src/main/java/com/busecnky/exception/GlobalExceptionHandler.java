@@ -14,7 +14,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.busecnky.exception.ErrorType.BAD_REQUEST_ERROR;
+import static com.busecnky.exception.EErrorType.BAD_REQUEST_ERROR;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -26,60 +26,61 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseBody
-    public ResponseEntity<EErrorMessage> handleIllegalArgumentException(IllegalArgumentException exception){
-        ErrorType errorType = ErrorType.INTERNAL_ERROR;
+    public ResponseEntity<ErrorMessage> handleIllegalArgumentException(IllegalArgumentException exception){
+        EErrorType errorType = EErrorType.INTERNAL_ERROR;
         return new ResponseEntity<>(createError(errorType,exception), HttpStatus.BAD_REQUEST);
     }
 
 
     @ExceptionHandler(AuthException.class)
     @ResponseBody
-    public ResponseEntity<EErrorMessage> handleSpringMonoException(AuthException exception){
+    public ResponseEntity<ErrorMessage> handleSpringMonoException(AuthException exception){
         return new ResponseEntity<>(createError(exception.getErrorType(),exception),exception.getErrorType().getHttpStatus());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public final ResponseEntity<EErrorMessage> handleMessageNotReadableException(
+    public final ResponseEntity<ErrorMessage> handleMessageNotReadableException(
             HttpMessageNotReadableException exception) {
-        ErrorType errorType = BAD_REQUEST_ERROR;
+        EErrorType errorType = BAD_REQUEST_ERROR;
         return new ResponseEntity<>(createError(errorType, exception), errorType.getHttpStatus());
     }
 
     @ExceptionHandler(InvalidFormatException.class)
-    public final ResponseEntity<EErrorMessage> handleInvalidFormatException(
+    public final ResponseEntity<ErrorMessage> handleInvalidFormatException(
             InvalidFormatException exception) {
-        ErrorType errorType = BAD_REQUEST_ERROR;
+        EErrorType errorType = BAD_REQUEST_ERROR;
+
         return new ResponseEntity<>(createError(errorType, exception), errorType.getHttpStatus());
     }
 
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public final ResponseEntity<EErrorMessage> handleMethodArgumentMisMatchException(
+    public final ResponseEntity<ErrorMessage> handleMethodArgumentMisMatchException(
             MethodArgumentTypeMismatchException exception) {
-        ErrorType errorType = BAD_REQUEST_ERROR;
+        EErrorType errorType = BAD_REQUEST_ERROR;
         return new ResponseEntity<>(createError(errorType, exception), errorType.getHttpStatus());
     }
 
     @ExceptionHandler(MissingPathVariableException.class)
-    public final ResponseEntity<EErrorMessage> handleMethodArgumentMisMatchException(
+    public final ResponseEntity<ErrorMessage> handleMethodArgumentMisMatchException(
             MissingPathVariableException exception) {
-        ErrorType errorType = BAD_REQUEST_ERROR;
+        EErrorType errorType = BAD_REQUEST_ERROR;
         return new ResponseEntity<>(createError(errorType, exception), errorType.getHttpStatus());
     }
 
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public final ResponseEntity<EErrorMessage> handleMethodArgumentNotValidException(
+    public final ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException exception) {
-        ErrorType errorType = BAD_REQUEST_ERROR;
+        EErrorType errorType = BAD_REQUEST_ERROR;
         List<String> fields = new ArrayList<>();
         exception
                 .getBindingResult()
                 .getFieldErrors()
                 .forEach(e -> fields.add(e.getField() + ": " + e.getDefaultMessage()));
-        EErrorMessage errorMessage = createError(errorType, exception);
-
+        ErrorMessage errorMessage = createError(errorType, exception);
+        errorMessage.setFields(fields);
         return new ResponseEntity<>(errorMessage, errorType.getHttpStatus());
     }
 
@@ -91,9 +92,9 @@ public class GlobalExceptionHandler {
      * 3- Dönüş nesnesini bir method ile oluşturmak mantıklıdır. çünkü method içinde
      * loglama yapabilir geribildirtimleri toplayabilirsiniz.
      */
-    private EErrorMessage createError(ErrorType errorType, Exception exception){
+    private ErrorMessage createError(EErrorType errorType, Exception exception){
         System.out.println("HATA OLDU.....: "+ exception.getMessage());
-        return EErrorMessage.builder()
+        return ErrorMessage.builder()
                 .code(errorType.getCode())
                 .message(errorType.getMessage())
                 .build();

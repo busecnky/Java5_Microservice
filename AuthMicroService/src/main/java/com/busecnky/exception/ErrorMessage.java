@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Component
-public class EErrorMessage {
+public class ErrorMessage {
 
     private int code;
     private String message;

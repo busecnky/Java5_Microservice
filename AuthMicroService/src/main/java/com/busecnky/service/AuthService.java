@@ -1,6 +1,8 @@
 package com.busecnky.service;
 
 import com.busecnky.dto.request.RegisterRequestDto;
+import com.busecnky.exception.AuthException;
+import com.busecnky.exception.EErrorType;
 import com.busecnky.mapper.IAuthMapper;
 import com.busecnky.repository.IAuthRepository;
 import com.busecnky.repository.entity.Auth;
@@ -17,7 +19,9 @@ public class AuthService extends ServiceManager<Auth,Long> {
     }
 
     public boolean register(RegisterRequestDto dto){
-        repository.save(IAuthMapper.INSTANCE.fromRegisterDto(dto));
+        if(repository.isUsername(dto.getUsername()))
+            throw new AuthException(EErrorType.AUTH_USERNAME_ERROR);
+        save(IAuthMapper.INSTANCE.fromRegisterDto(dto));
         return true;
     }
 
