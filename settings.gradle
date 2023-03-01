@@ -1,7 +1,5 @@
 rootProject.name = 'Java5_Microservice'
 include 'AuthMicroService'
-include 'AuthMicroService:UserMicroService'
-findProject(':AuthMicroService:UserMicroService')?.name = 'UserMicroService'
 include 'UserMicroService'
 include 'UrunMicroService'
 include 'ETicaretMicroService'
