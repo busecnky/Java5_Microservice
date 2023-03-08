@@ -22,7 +22,8 @@ public class RegisterRequestDto {
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=*!])(?=\\S+$).{8,}$",
             message = "Şifre en az 8 Karakter, Enaz bir büyük bir küçük harf, Sayı ve özel karakterden oluşmalıdır.")
     String password;
-
+    @NotNull(message = "Şifre boş geçilemez.")
+    @Size(min = 8, max = 64)
     String repassword;
     @NotNull(message = "Lütfen geçerli bir email adresi giriniz.")
     String email;
